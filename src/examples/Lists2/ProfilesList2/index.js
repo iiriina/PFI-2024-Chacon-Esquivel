@@ -24,7 +24,7 @@ function ProfilesList({ title, productPrice, productWeight }) {
         const puertaAPuertaData = await getPuertaAPuerta();
 
         // Aquí seleccionamos el costo de envío en base al peso del producto
-        const pesoKey = "fedexEconomy1Kg";
+        const pesoKey = "fedexEconomy3Kg";
         const envio = puertaAPuertaData.data[pesoKey];
 
         // Guardamos el costo de envío y el valor del dólar oficial

@@ -11,7 +11,7 @@ import breakpoints from "assets/theme/base/breakpoints";
 // Images
 import curved0 from "assets/images/curved-images/curved0.jpg";
 
-function Header({ title }) { // Receiving title as prop
+function Header2({ title }) { // Receiving title as prop
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
 
   useEffect(() => {
@@ -75,8 +75,8 @@ function Header({ title }) { // Receiving title as prop
 }
 
 // Define PropTypes for the Header component
-Header.propTypes = {
+Header2.propTypes = {
   title: PropTypes.string.isRequired, // 'title' should be passed as a string and is required
 };
 
-export default Header;
+export default Header2;

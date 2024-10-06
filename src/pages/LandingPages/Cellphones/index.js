@@ -53,17 +53,7 @@ function Cellphones() {
     const transformedFilters = {
       query: searchQuery || '', // Añadir la query si existe
       min_price: filters.min_price ?? null,
-      max_price: filters.max_price ?? null,
-      min_dimension: filters.min_dimension ?? null,
-      max_dimension: filters.max_dimension ?? null,
-      min_peso: filters.min_peso ?? null,
-      max_peso: filters.max_peso ?? null,
-      min_resolucion_ppi: filters.min_resolucion_ppi ?? null,
-      max_resolucion_ppi: filters.max_resolucion_ppi ?? null,
-      min_almacenamiento: filters.min_almacenamiento ?? null,
-      max_almacenamiento: filters.max_almacenamiento ?? null,
-      min_camera_mp: filters.min_camera_mp ?? null,
-      max_camera_mp: filters.max_camera_mp ?? null,
+      max_price: filters.max_price ?? null
     };
 
     const cleanedFilters = Object.fromEntries(
@@ -116,11 +106,12 @@ function Cellphones() {
                     <Grid item xs={12} sm={6} md={3} key={product._id || index}>
                       <CenteredBlogCard
                         image={product.imagen}
-                        title={`${product.marca} - ${product.modelo}`}
-                        description={product.descripcion.split('.')[0] + '.'}
+                        title={`${product.marca} - ${product.nombre}`}
+                        description={`Precio: ${product.precio}`}
+                        product={product} // Pasa el producto completo
                         action={{
                           type: "internal",
-                          route: "/product-detail",
+                          route: `/producto/${product._id}`,
                           color: "info",
                           label: "Ver detalles",
                         }}

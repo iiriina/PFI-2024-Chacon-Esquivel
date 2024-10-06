@@ -7,7 +7,7 @@ import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 import MKButton from "components/MKButton";
 
-function CenteredBlogCard({ image, title, description, action, product }) {
+function CenteredBlogCard2({ image, title, description, action, product }) {
   return (
     <Card sx={{ maxWidth: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", margin: "auto" }}>
       <MKBox position="relative" borderRadius="lg" mx={2} mt={2} textAlign="center">
@@ -15,7 +15,7 @@ function CenteredBlogCard({ image, title, description, action, product }) {
           component="div"
           sx={{
             width: "100%",
-            paddingBottom: "70.25%", // Esto establece una relación de aspecto de 16:9 (altura relativa al ancho)
+            paddingBottom: "70.25%", // Relación de aspecto 16:9 (altura relativa al ancho)
             position: "relative",
             overflow: "hidden",
             borderRadius: "lg",
@@ -31,8 +31,8 @@ function CenteredBlogCard({ image, title, description, action, product }) {
               left: "0",
               width: "100%",
               height: "100%",
-              objectFit: "contain", // Asegura que la imagen se ajuste dentro del área sin recortarse
-              objectPosition: "center", // Centra la imagen dentro del contenedor
+              objectFit: "contain", // Asegura que la imagen se ajuste dentro del área
+              objectPosition: "center", // Centra la imagen
             }}
           />
         </MKBox>
@@ -71,17 +71,19 @@ function CenteredBlogCard({ image, title, description, action, product }) {
               {action.label}
             </MKButton>
           ) : (
-            <MKButton
-              component={Link}
-              to={{
-                pathname: `/producto/${product._id}`, // Redirige al producto específico usando su ID
-              }}
-              variant="gradient"
-              size="small"
-              color={action.color ? action.color : "dark"}
-            >
-              {action.label}
-            </MKButton>
+            product && product._id ? (
+              <MKButton
+                component={Link}
+                to={`/computadora/${product._id}`} // Redirige al producto específico usando su ID
+                variant="gradient"
+                size="small"
+                color={action.color ? action.color : "dark"}
+              >
+                {action.label}
+              </MKButton>
+            ) : (
+              <p>Producto no disponible</p>  // Renderiza un mensaje alternativo si no hay producto
+            )
           )}
         </MKBox>
       </MKBox>
@@ -89,7 +91,7 @@ function CenteredBlogCard({ image, title, description, action, product }) {
   );
 }
 
-CenteredBlogCard.propTypes = {
+CenteredBlogCard2.propTypes = {
   image: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -108,7 +110,7 @@ CenteredBlogCard.propTypes = {
     ]),
     label: PropTypes.string.isRequired,
   }).isRequired,
-  product: PropTypes.object.isRequired, // Asegura que se pasa el producto completo como objeto
+  product: PropTypes.object.isRequired, // Asegura que se pasa el productois required, validando que no esté undefined.
 };
 
-export default CenteredBlogCard;
+export default CenteredBlogCard2;

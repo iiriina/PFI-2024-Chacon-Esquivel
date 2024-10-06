@@ -3,67 +3,61 @@ import MKBox from "components/MKBox";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import CenteredBlogCard from "examples/Cards/BlogCards/CenteredBlogCard";
+import CenteredBlogCard from 'examples/Cards/BlogCards/CenteredBlogCardCompus'; // Tarjeta para computadoras
 import { FaSearch } from 'react-icons/fa';
 import './index.css';
 import Sidebar from 'components/SideBar';
-import { getComputadoras } from 'controllers/getComputadoras';
+import { getComputadoras } from 'controllers/getComputadoras';  // Función para obtener las computadoras
 
-// Routes
+// Rutas
 import routes from "routes";
 
 function Products() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');  // Estado para la búsqueda
+  const [products, setProducts] = useState([]);  // Estado para los productos (computadoras)
+  const [loading, setLoading] = useState(false);  // Estado de carga
 
+  // Función para obtener los productos (computadoras)
   const fetchProducts = async (filtros = {}) => {
     setLoading(true);
     try {
-      const resultados = await getComputadoras(filtros);
+      const resultados = await getComputadoras(filtros);  // Llamada a la función para obtener computadoras
 
       if (Array.isArray(resultados.data)) {
-        setProducts(resultados.data);
+        setProducts(resultados.data);  // Establecer los productos en el estado
       } else {
-        setProducts([]);
+        setProducts([]);  // Si no hay resultados, vaciar la lista de productos
       }
     } catch (error) {
       console.error("Error al buscar computadoras:", error);
-      setProducts([]);
+      setProducts([]);  // Manejo de errores
     } finally {
-      setLoading(false);
+      setLoading(false);  // Terminar el estado de carga
     }
   };
 
+  // UseEffect para obtener productos cuando el componente se monta
   useEffect(() => {
     fetchProducts({ query: '', filtros: {} });
   }, []);
 
+  // Función para manejar cambios en la búsqueda
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
+  // Función para realizar la búsqueda
   const handleSearchSubmit = () => {
     fetchProducts({ query: searchQuery });
   };
 
+  // Función para aplicar filtros desde la barra lateral
   const handleApplyFilters = (filters) => {
-
     console.log("que hay adentro de filters", filters);
     const transformedFilters = {
-      query: searchQuery || '', // Añadir la query si existe
+      query: searchQuery || '',  // Añadir la query si existe
       min_price: filters.min_price || undefined,
-      max_price: filters.max_price || undefined,
-      min_dimension: filters.min_dimension || undefined,
-      max_dimension: filters.max_dimension || undefined,
-      min_peso: filters.min_peso || undefined,
-      max_peso: filters.max_peso || undefined,
-      min_duracion_bateria: filters.min_duracion_bateria || undefined,
-      max_duracion_bateria: filters.max_duracion_bateria || undefined,
-      min_ram: filters.ram.length > 0 ? Math.min(...filters.ram.map(Number)) : undefined,
-      max_ram: filters.ram.length > 0 ? Math.max(...filters.ram.map(Number)) : undefined,
-      min_almacenamiento: filters.almacenamiento.length > 0 ? Math.min(...filters.almacenamiento.map(Number)) : undefined,
-      max_almacenamiento: filters.almacenamiento.length > 0 ? Math.max(...filters.almacenamiento.map(Number)) : undefined,
+      max_price: filters.max_price || undefined
     };
 
     const cleanedFilters = Object.fromEntries(
@@ -101,10 +95,12 @@ function Products() {
 
         <Container>
           <Grid container spacing={3}>
+            {/* Sidebar de filtros */}
             <Grid item xs={12} md={3} lg={2}>
               <Sidebar onApplyFilters={handleApplyFilters} />
             </Grid>
 
+            {/* Listado de productos */}
             <Grid item xs={12} md={9} lg={10}>
               <Grid container spacing={3}>
                 {loading ? (
@@ -113,18 +109,23 @@ function Products() {
                   <p style={{ textAlign: 'center', width: '100%' }}>No se encontraron productos :( Prueba con otra búsqueda</p>
                 ) : (
                   products.map((product, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={product._id || index}>
-                      <CenteredBlogCard
-                        image={product.imagen}
-                        title={`${product.marca} - ${product.modelo}`}
-                        description={product.descripcion.split('.')[0] + '.'}
-                        action={{
-                          type: "internal",
-                          route: "/product-detail",
-                          color: "info",
-                          label: "Ver detalles",
-                        }}
-                      />
+                    <Grid item xs={12} sm={6} md={3} key={product?._id || index}>
+                      {product ? (
+                        <CenteredBlogCard
+                          image={Array.isArray(product.imagenes) ? product.imagenes[0] : product.imagen}
+                          title={`${product.nombre}`}
+                          description={product.precio}
+                          action={{
+                            type: "internal",
+                            route: `/computadora/${product._id}`,
+                            color: "info",
+                            label: "Ver Más",
+                          }}
+                          product={product} // Pasar el producto completo
+                        />
+                      ) : (
+                        <p>Producto no disponible</p>  // Mostrar un mensaje alternativo si el producto no está disponible
+                      )}
                     </Grid>
                   ))
                 )}
